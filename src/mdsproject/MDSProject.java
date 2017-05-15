@@ -10,7 +10,7 @@ public class MDSProject
     public static void main(String[] args) 
     {
         //System.out.println("We started!");
-        System.out.println("Another try");
+        System.out.println("My commit");
         
     }  
 }
