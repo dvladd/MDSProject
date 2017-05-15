@@ -4,6 +4,7 @@ package mdsproject;
  *
  * @author Vlad
  */
-public class Database {
+public class Database 
+{
     
 }
