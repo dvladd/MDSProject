@@ -45,4 +45,16 @@ public class DataBase {
         return number;
     }
 
+    void addUser(String username, String password, String nickname) throws ClassNotFoundException, SQLException {
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        System.out.println("Connecting to database...");
+        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        Statement stmt = conn.createStatement();
+        String sql = "insert into useri values('" + username + "','" + password + "','" + nickname + "','" + 0 + "')";
+        stmt.executeUpdate(sql);
+        System.out.println("User added!");
+        stmt.close();
+        conn.close();
+    }
+
 }
