@@ -110,32 +110,66 @@ public class DataBase {
         return conversation;
     }
 
-    public void creaza_txt(String sender, String receiver) throws ClassNotFoundException, SQLException
-   {
-       try{
-    PrintWriter writer = new PrintWriter("FisierCreat"+sender+receiver+".txt", "UTF-8");
-    Class.forName("oracle.jdbc.driver.OracleDriver");
-	   System.out.println("Connecting to database...");
-	   Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
-	   Statement stmt = conn.createStatement();
-	   String sql = "select sender, text_date, text from mesaje where (sender='"+sender+"' and receiver='"+receiver+"') or (sender='"+receiver+"' and receiver='"+sender+"')";
-	   ResultSet rs = stmt.executeQuery(sql);
-	   while(rs.next()){
-		   String current_sender = rs.getString("sender");
-		   String text_date = rs.getString("text_date");
-		   String text = rs.getString("text");
-		    writer.println(current_sender + "(" + text_date +"):  " + text + "\n"); 
-	   }
-           
-           
-           writer.close();
-	   rs.close();
-	   stmt.close();
-	   conn.close();
-    
-} catch (IOException e) {
-   // do something
-}
-       
-   }
+    public void creaza_txt(String sender, String receiver) throws ClassNotFoundException, SQLException {
+        try {
+            PrintWriter writer = new PrintWriter("FisierCreat" + sender + receiver + ".txt", "UTF-8");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            System.out.println("Connecting to database...");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            String sql = "select sender, text_date, text from mesaje where (sender='" + sender + "' and receiver='" + receiver + "') or (sender='" + receiver + "' and receiver='" + sender + "')";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String current_sender = rs.getString("sender");
+                String text_date = rs.getString("text_date");
+                String text = rs.getString("text");
+                writer.println(current_sender + "(" + text_date + "):  " + text + "\n");
+            }
+
+            writer.close();
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (IOException e) {
+            // do something
+        }
+
+    }
+
+    public void creaza_binar(String sender, String receiver) throws ClassNotFoundException, SQLException {
+        try {
+            PrintWriter writer = new PrintWriter("FisierCreatBinar" + sender + receiver + ".bin", "UTF-8");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            System.out.println("Connecting to database...");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            String sql = "select sender, text_date, text from mesaje where (sender='" + sender + "' and receiver='" + receiver + "') or (sender='" + receiver + "' and receiver='" + sender + "')";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String current_sender = rs.getString("sender");
+                String text_date = rs.getString("text_date");
+                String text = rs.getString("text");
+                //writer.println(current_sender + "(" + text_date + "):  " + text + "\n");
+                String str = current_sender + "(" + text_date + "):  " + text + "\n";
+                String result = "";
+                char[] messChar = str.toCharArray();
+
+                for (int i = 0; i < messChar.length; i++) {
+                    result += Integer.toBinaryString(messChar[i]) + " ";
+                }
+                writer.println(result);
+            }
+
+            writer.close();
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (IOException e) {
+            // do something
+        }
+
+    }
+
 }
