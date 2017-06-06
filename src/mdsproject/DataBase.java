@@ -99,9 +99,7 @@ public class DataBase {
 		   String text = rs.getString("text");
 		   conversation = conversation + current_sender + "(" + text_date +"):  " + text + "\n"; 
 	   }
-           
-           
-           
+
 	   rs.close();
 	   stmt.close();
 	   conn.close();
