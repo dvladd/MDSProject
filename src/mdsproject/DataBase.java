@@ -85,4 +85,25 @@ public class DataBase {
 	   conn.close();
    }
     
+      String getMessages(String sender, String receiver) throws ClassNotFoundException, SQLException{
+	   String conversation = new String();
+	   Class.forName("oracle.jdbc.driver.OracleDriver");
+	   System.out.println("Connecting to database...");
+	   Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	   Statement stmt = conn.createStatement();
+	   String sql = "select sender, text_date, text from mesaje where (sender='"+sender+"' and receiver='"+receiver+"') or (sender='"+receiver+"' and receiver='"+sender+"')";
+	   ResultSet rs = stmt.executeQuery(sql);
+	   while(rs.next()){
+		   String current_sender = rs.getString("sender");
+		   String text_date = rs.getString("text_date");
+		   String text = rs.getString("text");
+		   conversation = conversation + current_sender + "(" + text_date +"):  " + text + "\n"; 
+	   }
+
+	   rs.close();
+	   stmt.close();
+	   conn.close();
+	   return conversation;
+   }
+   
 }
