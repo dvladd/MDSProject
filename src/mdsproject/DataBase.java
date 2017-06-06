@@ -57,4 +57,32 @@ public class DataBase {
         conn.close();
     }
 
+    ArrayList<String> getUsers(String current_user) throws ClassNotFoundException, SQLException{
+	   ArrayList<String> lista = new ArrayList<String>();
+	   Class.forName("oracle.jdbc.driver.OracleDriver");
+	   System.out.println("Connecting to database...");
+	   Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	   Statement stmt = conn.createStatement();
+	   String sql = "select username from useri where username != '"+current_user+"'";
+	   ResultSet rs = stmt.executeQuery(sql);
+	   while(rs.next()){
+		   String user = rs.getString("username");
+		   lista.add(user);
+		   }
+	   rs.close();
+	   stmt.close();
+	   conn.close();
+	   return lista;
+   }
+   void sendMessage(String sender, String receiver, String text) throws ClassNotFoundException, SQLException{
+	   Class.forName("oracle.jdbc.driver.OracleDriver");
+	   System.out.println("Connecting to database...");
+	   Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	   Statement stmt = conn.createStatement();
+	   String sql = "insert into mesaje values((select count(*) from mesaje)+1,'"+sender+"','"+receiver+"',to_char(sysdate,'DD/MM/YYYY HH24:MI:SS'),'"+text+"')";
+	   stmt.executeUpdate(sql);
+	   stmt.close();
+	   conn.close();
+   }
+    
 }
