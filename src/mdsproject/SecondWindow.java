@@ -16,16 +16,17 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class SecondWindow extends javax.swing.JFrame 
-{
+public class SecondWindow extends javax.swing.JFrame {
+
     String user1;
     String user2;
-    
+
     DataBase myBD = new DataBase();
+
     /**
      * Creates new form SecondWindow
      */
-    
+
     public SecondWindow(String user11) throws ClassNotFoundException, SQLException {
         user1 = user11;
         System.out.println(user1);
@@ -53,6 +54,7 @@ public class SecondWindow extends javax.swing.JFrame
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
+        jButton8 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -99,6 +101,14 @@ public class SecondWindow extends javax.swing.JFrame
         jScrollPane2.setViewportView(jTextArea2);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 590, 340));
+
+        jButton8.setText("SalveazaTXT");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton8);
 
         jButton3.setBackground(new java.awt.Color(0, 51, 204));
         jButton3.setPreferredSize(new java.awt.Dimension(33, 15));
@@ -161,13 +171,14 @@ public class SecondWindow extends javax.swing.JFrame
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String toSendMessage = jTextArea1.getText();
-        
+
         try {
             //System.out.println(toSendMessage);
             myBD.sendMessage(user1, user2, toSendMessage);
             String listaMesaje = myBD.getMessages(user1, user2);
             jTextArea2.setText("");
             jTextArea2.replaceSelection(listaMesaje);
+            jTextArea1.setText("");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SecondWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -196,7 +207,7 @@ public class SecondWindow extends javax.swing.JFrame
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       this.getContentPane().setBackground(Color.yellow);
+        this.getContentPane().setBackground(Color.yellow);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -204,60 +215,78 @@ public class SecondWindow extends javax.swing.JFrame
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-       this.getContentPane().setBackground(Color.red);
+        this.getContentPane().setBackground(Color.red);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void timeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_timeTextActionPerformed
 
-    public void loadOnline() throws ClassNotFoundException, SQLException
-    {
-        ArrayList <String> myVector;
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try {
+            //System.out.println(toSendMessage);
+            myBD.creaza_txt(user1,user2);
+            
+           
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SecondWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SecondWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    public void loadOnline() throws ClassNotFoundException, SQLException {
+        ArrayList<String> myVector;
         myVector = myBD.getUsers("plm");
-        
-        for(int i = 0; i < myVector.size(); i++)
-        {
+
+        for (int i = 0; i < myVector.size(); i++) {
             GridBagConstraints constraints = new GridBagConstraints();
             JButton button = new JButton(myVector.get(i));
-            constraints.gridx=0;
-            constraints.gridy=i;
+            constraints.gridx = 0;
+            constraints.gridy = i;
             button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) 
-            {buttonActionPerformed(evt);}
-            
-            private void buttonActionPerformed(ActionEvent evt) {
-                user2 = button.getText();
-                System.out.println(user1+" "+user2);
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonActionPerformed(evt);
+                }
+
+                private void buttonActionPerformed(ActionEvent evt) {
+                    user2 = button.getText();
+                    try {
+            String listaMesaje = myBD.getMessages(user1, user2);
+            jTextArea2.setText("");
+            jTextArea2.replaceSelection(listaMesaje);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SecondWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SecondWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                    System.out.println(user1 + " " + user2);
                 }
             });
             jPanel1.add(button, constraints);
             jPanel1.repaint();
         }
-        
+
     }
-   
-    
-      public void CurentDate()
-    {
-        Calendar cal= new GregorianCalendar();
+
+    public void CurentDate() {
+        Calendar cal = new GregorianCalendar();
         int sec = cal.get(Calendar.SECOND);
         int min = cal.get(Calendar.MINUTE);
         int ore = cal.get(Calendar.HOUR);
-        timeText.setText("Time: "+ore+":"+min+":"+sec);
+        timeText.setText("Time: " + ore + ":" + min + ":" + sec);
     }
-    
-    public void dynamic_time()
-    {
-        Thread ceas=new Thread(){
-            public void run(){
-                for(;;){
-                   Calendar cal= new GregorianCalendar();
-        int sec = cal.get(Calendar.SECOND);
-        int min = cal.get(Calendar.MINUTE);
-        int ore = cal.get(Calendar.HOUR);
-        timeText.setText("Time: "+ore+":"+min+":"+sec); 
-        
+
+    public void dynamic_time() {
+        Thread ceas = new Thread() {
+            public void run() {
+                for (;;) {
+                    Calendar cal = new GregorianCalendar();
+                    int sec = cal.get(Calendar.SECOND);
+                    int min = cal.get(Calendar.MINUTE);
+                    int ore = cal.get(Calendar.HOUR);
+                    timeText.setText("Time: " + ore + ":" + min + ":" + sec);
+
                     try {
                         sleep(1000);
                     } catch (InterruptedException ex) {
@@ -269,7 +298,7 @@ public class SecondWindow extends javax.swing.JFrame
         ceas.start();
     }
     //aici
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -279,6 +308,7 @@ public class SecondWindow extends javax.swing.JFrame
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollBar jScrollBar1;

@@ -3,16 +3,18 @@ package mdsproject;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class FirstWindow extends javax.swing.JFrame {
-    
+
     static String user1;
     DataBase myBD = new DataBase();
     SecondWindow frame2;
+
     /**
      * Creates new form FirstWindow
      */
-    
+
     public FirstWindow() throws ClassNotFoundException, SQLException {
         initComponents();
     }
@@ -218,14 +220,16 @@ public class FirstWindow extends javax.swing.JFrame {
         //System.out.println(toVerifyUser);
         String toVerifyPassword = String.valueOf(jPasswordField1.getPassword());
         //System.out.println(toVerifyPassword);
-        
+        int rez = -1;
         try {
-            myBD.isUser(toVerifyUser, toVerifyPassword);
+           rez = myBD.isUser(toVerifyUser, toVerifyPassword);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FirstWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(FirstWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if(rez==1)
+        {
         user1 = toVerifyUser;
         try {
             frame2 = new SecondWindow(user1);
@@ -234,6 +238,10 @@ public class FirstWindow extends javax.swing.JFrame {
             Logger.getLogger(FirstWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(FirstWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Username sau parola incorecta!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -251,7 +259,7 @@ public class FirstWindow extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FirstWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
